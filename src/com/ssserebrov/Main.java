@@ -1,10 +1,6 @@
 package com.ssserebrov;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -14,21 +10,27 @@ import java.util.Timer;
 public class Main {
     static String source_folder = "pics";
 
-
-
     public static void main(String[] args) {
-        System.out.print("Hello ");
+        System.out.print("Start ");
 
+        for (String arg: args) {
+            switch (arg) {
+                case "save":  save();
+                    break;
+                case "compile":  compile();
+                    break;
+                default:
+                    break;
+            }
+        }
 
-        // save();
-
-        //compile();
-        upload();
+//        save();
+//        compile();
+        //upload();
     }
 
     private static void upload() {
 
-        Yb.uploadAll(source_folder);
     }
 
     private static void compile() {
@@ -41,38 +43,29 @@ public class Main {
 
     private static void save() {
         String url = "http://content.cam72.su/thumbnails/Gorsad-small.jpg";
+        int seconds = 15;
+
+        Date startTime = getNextMinuteDateTime();
+
         Saver timerTask = new Saver(url, source_folder);
-
-        Clock minuteTickingClock = Clock.tickMinutes(ZoneId.systemDefault());
-        LocalDateTime now =  LocalDateTime.now(minuteTickingClock);
-        LocalDateTime roundCeiling =  now.plusMinutes(1);
-
-        Date startTime = java.util.Date.from(roundCeiling.atZone(ZoneId.systemDefault())
-                        .toInstant());
-
-
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask,  startTime, 1000*60);
-
-
-        //scheduleAtFixedRate(TimerTask task, Date firstTime, long period)
-
-        System.out.println("TimerTask начал выполнение");
-
-
-        // вызываем cancel() через какое-то время
+        timer.scheduleAtFixedRate(timerTask,  startTime, 1000*seconds);
+        System.out.println("Start saving");
         try {
             Thread.sleep(Long.MAX_VALUE);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         timer.cancel();
-        System.out.println("TimerTask прекращена");
+        System.out.println("Finish saving");
     }
 
+    private static Date getNextMinuteDateTime() {
+        Clock minuteTickingClock = Clock.tickMinutes(ZoneId.systemDefault());
+        LocalDateTime now =  LocalDateTime.now(minuteTickingClock);
+        LocalDateTime roundCeiling =  now.plusMinutes(1);
 
-
+        return java.util.Date.from(roundCeiling.atZone(ZoneId.systemDefault())
+                .toInstant());
+    }
 }
-
-
-//

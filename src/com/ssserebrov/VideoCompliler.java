@@ -46,4 +46,17 @@ public class VideoCompliler {
             }
         }
     }
+
+    public static void uploadAll(String source_folder) {
+        File[] dirsDaily = new File(source_folder).listFiles(File::isDirectory);
+        for (File dirDaily : dirsDaily) {
+            File[] dirsHourly = dirDaily.listFiles(File::isDirectory);
+            for (File dirHourly : dirsHourly) {
+                File[] videoFiles = dirHourly.listFiles((d, name) -> name.endsWith(".mp4"));
+                for (File videoFile : videoFiles) {
+
+                }
+            }
+        }
+    }
 }

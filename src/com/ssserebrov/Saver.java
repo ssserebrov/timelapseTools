@@ -33,13 +33,13 @@ public class Saver extends TimerTask {
         String fileName = sdfT.format(c.getTime());
        // String hour = sdf.format(c.getTime());
 
-        File file = new File(day);
-        if (!file.exists())
-            file.mkdirs();
+        File dirHourly = new File(this.destinationFolder + File.separator + day);
+        if (!dirHourly.exists())
+            dirHourly.mkdirs();
 
         //saveCurrentTime
        // createFolder
-        File outputFile = new File(this.destinationFolder + File.separator + day + File.separator + fileName + ".jpg");
+        File outputFile = new File(dirHourly + File.separator + fileName + ".jpg");
         ImageIO.write(urlImage, "jpg", outputFile);
     }
 
