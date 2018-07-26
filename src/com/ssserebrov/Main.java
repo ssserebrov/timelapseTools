@@ -1,6 +1,7 @@
 package com.ssserebrov;
 
 import java.io.IOException;
+import java.net.URLConnection;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -42,7 +43,13 @@ public class Main {
     }
 
     private static void save() {
-        String url = "http://content.cam72.su/thumbnails/Gorsad-small.jpg";
+
+
+
+
+
+
+        String url = "http://192.168.1.136/tmpfs/auto.jpg";
         int seconds = 15;
 
         Date startTime = getNextMinuteDateTime();

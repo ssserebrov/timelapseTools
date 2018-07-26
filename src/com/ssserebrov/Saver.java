@@ -5,7 +5,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +26,43 @@ public class Saver extends TimerTask {
     }
 
     public void saveImage() throws IOException, InterruptedException {
+
+        Authenticator.setDefault(new Authenticator() {
+
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("admin", "22312231".toCharArray());
+            }
+        });
         URL urlInput = new URL(this.url);
+
+
+
+        String loginPassword = "admin" + ":" + "22222222";
+       // String encoded = new sun.misc.BASE64Encoder().encode (loginPassword.getBytes());
+//        String encoded2 = new sun.misc.BASE64Encoder().encode (loginPassword.getBytes());
+//
+//
+//
+//
+//
+//
+//
+//
+//        byte[] bytes = new byte[57];
+//        String enc1 = new sun.misc.BASE64Encoder().encode(bytes);
+        String encoded = new String(java.util.Base64.getEncoder().encode(loginPassword.getBytes()));
+
+
+//
+//        URLConnection conn = urlInput.openConnection();
+//        conn.setRequestProperty ("Authorization", "Basic " + encoded);
+
+
+
+
+
+
         BufferedImage urlImage = ImageIO.read(urlInput);
 
         Calendar c = Calendar.getInstance();
