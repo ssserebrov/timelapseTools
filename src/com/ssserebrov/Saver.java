@@ -1,20 +1,17 @@
 package com.ssserebrov;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimerTask;
 
-public class Saver extends TimerTask {
+public class Saver{
 
     private final String url;
     private final String destinationFolder;
@@ -36,33 +33,6 @@ public class Saver extends TimerTask {
         });
         URL urlInput = new URL(this.url);
 
-
-
-        String loginPassword = "admin" + ":" + "22222222";
-       // String encoded = new sun.misc.BASE64Encoder().encode (loginPassword.getBytes());
-//        String encoded2 = new sun.misc.BASE64Encoder().encode (loginPassword.getBytes());
-//
-//
-//
-//
-//
-//
-//
-//
-//        byte[] bytes = new byte[57];
-//        String enc1 = new sun.misc.BASE64Encoder().encode(bytes);
-        String encoded = new String(java.util.Base64.getEncoder().encode(loginPassword.getBytes()));
-
-
-//
-//        URLConnection conn = urlInput.openConnection();
-//        conn.setRequestProperty ("Authorization", "Basic " + encoded);
-
-
-
-
-
-
         BufferedImage urlImage = ImageIO.read(urlInput);
 
         Calendar c = Calendar.getInstance();
@@ -80,19 +50,5 @@ public class Saver extends TimerTask {
        // createFolder
         File outputFile = new File(dirHourly + File.separator + fileName + ".jpg");
         ImageIO.write(urlImage, "jpg", outputFile);
-    }
-
-    @Override
-    public void run() {
-        System.out.println("TimerTask начал свое выполнение в:" + new Date());
-        try {
-            saveImage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("TimerTask закончил свое выполнение в:" + new Date());
     }
 }

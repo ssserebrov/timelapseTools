@@ -1,13 +1,9 @@
 package com.ssserebrov;
 
 import org.jcodec.api.awt.AWTSequenceEncoder;
-import org.jcodec.common.io.FileChannelWrapper;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.io.SeekableByteChannel;
 import org.jcodec.common.model.Rational;
-import org.jcodec.common.tools.MainUtils;
-import org.jcodec.common.tools.MainUtils.Cmd;
-import org.jcodec.common.tools.MainUtils.Flag;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -29,7 +25,7 @@ public class VideoCompliler {
                 if (files.length < 10)
                     continue;
 
-                out = NIOUtils.writableFileChannel(dirHourly + File.separator + dirDaily.getName() + "_" + dirHourly.getName() + ".mp4");
+                out = NIOUtils.writableFileChannel(dirDaily.getPath() + File.separator + dirHourly.getName() + ".mp4");
                 AWTSequenceEncoder encoder = new AWTSequenceEncoder(out, Rational.R(25, 1));
                 try {
                     for (File file : files) {
@@ -42,6 +38,7 @@ public class VideoCompliler {
                     for (File file : files) {
                         file.delete();
                     }
+                    dirHourly.delete();
                 }
             }
         }

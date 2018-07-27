@@ -1,12 +1,12 @@
 package com.ssserebrov;
 
 import java.io.IOException;
-import java.net.URLConnection;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main {
     static String source_folder = "pics";
@@ -44,33 +44,65 @@ public class Main {
 
     private static void save() {
 
-
-
-
-
-
         String url = "http://192.168.1.136/tmpfs/auto.jpg";
         int seconds = 15;
 
         Date startTime = getNextMinuteDateTime();
 
-        Saver timerTask = new Saver(url, source_folder);
+        Saver saver = new Saver(url, source_folder);
+
+
         Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(timerTask,  startTime, 1000*seconds);
-        System.out.println("Start saving");
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    saver.saveImage();
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, startTime, 1000*seconds);
+
+
         try {
             Thread.sleep(Long.MAX_VALUE);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        timer.cancel();
-        System.out.println("Finish saving");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     private static Date getNextMinuteDateTime() {
         Clock minuteTickingClock = Clock.tickMinutes(ZoneId.systemDefault());
         LocalDateTime now =  LocalDateTime.now(minuteTickingClock);
         LocalDateTime roundCeiling =  now.plusMinutes(1);
+
+        return java.util.Date.from(roundCeiling.atZone(ZoneId.systemDefault())
+                .toInstant());
+    }
+
+    private static Date getNextMinutePlus7secondsDateTime() {
+        Clock minuteTickingClock = Clock.tickMinutes(ZoneId.systemDefault());
+        LocalDateTime now =  LocalDateTime.now(minuteTickingClock);
+        LocalDateTime roundCeiling =  now.plusMinutes(1).plusSeconds(7);
 
         return java.util.Date.from(roundCeiling.atZone(ZoneId.systemDefault())
                 .toInstant());
