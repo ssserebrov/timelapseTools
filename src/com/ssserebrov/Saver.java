@@ -9,46 +9,61 @@ import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
-public class Saver{
+class Saver{
 
-    private final String url;
-    private final String destinationFolder;
 
-    public Saver(String url, String destinationFolder) {
-
-        this.url = url;
-        this.destinationFolder = destinationFolder;
-    }
-
-    public void saveImage() throws IOException, InterruptedException {
-
+    static void saveImage(String url, String destinationFolder) throws IOException {
         Authenticator.setDefault(new Authenticator() {
-
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication("admin", "22312231".toCharArray());
             }
         });
-        URL urlInput = new URL(this.url);
+        URL urlInput = new URL(url);
 
         BufferedImage urlImage = ImageIO.read(urlInput);
 
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdfH = new SimpleDateFormat("yyyyMMdd" + File.separator + "HH");
+        SimpleDateFormat sdfD = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdfH = new SimpleDateFormat("HH");
         SimpleDateFormat sdfT = new SimpleDateFormat("HH_mm_ss");
-        String day = sdfH.format(c.getTime());
-        String fileName = sdfT.format(c.getTime());
-       // String hour = sdf.format(c.getTime());
+        String dateString = sdfD.format(c.getTime());
+        String hourString = sdfH.format(c.getTime());
+        String timeString = sdfT.format(c.getTime());
 
-        File dirHourly = new File(this.destinationFolder + File.separator + day);
-        if (!dirHourly.exists())
-            dirHourly.mkdirs();
+        File hourDir = new File(destinationFolder + File.separator + dateString + File.separator + hourString);
+        if (!hourDir.exists())
+            hourDir.mkdirs();
 
-        //saveCurrentTime
-       // createFolder
-        File outputFile = new File(dirHourly + File.separator + fileName + ".jpg");
+        File outputFile = new File(hourDir + File.separator + timeString + ".jpg");
         ImageIO.write(urlImage, "jpg", outputFile);
     }
+
+     static void saveImageDaily(String url, String destinationFolder) throws IOException {
+            Authenticator.setDefault(new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("admin", "22312231".toCharArray());
+                }
+            });
+            URL urlInput = new URL(url);
+
+            BufferedImage urlImage = ImageIO.read(urlInput);
+
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat sdfD = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat sdfT = new SimpleDateFormat("HH_mm_ss");
+            String dateString = sdfD.format(c.getTime());
+            String hourString = "24";
+            String timeString = sdfT.format(c.getTime());
+
+            File hourDir = new File(destinationFolder + File.separator + dateString + File.separator + hourString);
+            if (!hourDir.exists())
+                hourDir.mkdirs();
+
+            File outputFile = new File(hourDir + File.separator + timeString + ".jpg");
+            ImageIO.write(urlImage, "jpg", outputFile);
+    }
+
 }

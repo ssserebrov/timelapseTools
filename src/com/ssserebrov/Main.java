@@ -9,25 +9,25 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Main {
-    static String source_folder = "pics";
+    private static String source_folder = "pics";
+    private static String url = "http://192.168.1.136/tmpfs/auto.jpg";
 
     public static void main(String[] args) {
         System.out.print("Start ");
 
-        for (String arg: args) {
+        for (String arg : args) {
             switch (arg) {
-                case "save":  save();
+                case "save":
+                    save();
+                    saveDaily();
                     break;
-                case "compile":  compile();
+                case "compile":
+                    compile();
                     break;
                 default:
                     break;
             }
         }
-
-//        save();
-//        compile();
-        //upload();
     }
 
     private static void upload() {
@@ -44,50 +44,50 @@ public class Main {
 
     private static void save() {
 
-        String url = "http://192.168.1.136/tmpfs/auto.jpg";
         int seconds = 15;
-
         Date startTime = getNextMinuteDateTime();
 
-        Saver saver = new Saver(url, source_folder);
-
-
         Timer timer = new Timer(true);
-
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 try {
-                    saver.saveImage();
-                } catch (IOException | InterruptedException e) {
+                    Saver.saveImage(url, source_folder);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }, startTime, 1000*seconds);
-
 
         try {
             Thread.sleep(Long.MAX_VALUE);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
 
+    private static void saveDaily() {
 
+        int seconds = 60;
+        Date startTime = getNextMinutePlus7secondsDateTime();
 
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    Saver.saveImageDaily(url, source_folder);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, startTime, 1000*seconds);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        try {
+            Thread.sleep(Long.MAX_VALUE);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Date getNextMinuteDateTime() {
