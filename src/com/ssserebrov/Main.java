@@ -76,7 +76,7 @@ public class Main {
             @Override
             public void run() {
                 try {
-                    Saver.saveImageDaily(url, source_folder);
+                    Saver.saveImage(url, source_folder, "24");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
