@@ -28,6 +28,13 @@ public class Main {
                     break;
             }
         }
+
+        // better rework this
+        try {
+            Thread.sleep(Long.MAX_VALUE);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void upload() {
@@ -35,15 +42,22 @@ public class Main {
     }
 
     private static void compile() {
-        try {
-            VideoCompliler.complileAllInFolder(source_folder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        int seconds = 60 * 60 * 2;
+
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    VideoCompliler.complileAllInFolder(source_folder);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        },0, 1000 * seconds);
     }
 
     private static void save() {
-
         int seconds = 15;
         Date startTime = getNextMinuteDateTime();
 
@@ -57,17 +71,10 @@ public class Main {
                     e.printStackTrace();
                 }
             }
-        }, startTime, 1000*seconds);
-
-        try {
-            Thread.sleep(Long.MAX_VALUE);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        }, startTime, 1000 * seconds);
     }
 
     private static void saveDaily() {
-
         int seconds = 60;
         Date startTime = getNextMinutePlus7secondsDateTime();
 
@@ -81,19 +88,13 @@ public class Main {
                     e.printStackTrace();
                 }
             }
-        }, startTime, 1000*seconds);
-
-        try {
-            Thread.sleep(Long.MAX_VALUE);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        }, startTime, 1000 * seconds);
     }
 
     private static Date getNextMinuteDateTime() {
         Clock minuteTickingClock = Clock.tickMinutes(ZoneId.systemDefault());
-        LocalDateTime now =  LocalDateTime.now(minuteTickingClock);
-        LocalDateTime roundCeiling =  now.plusMinutes(1);
+        LocalDateTime now = LocalDateTime.now(minuteTickingClock);
+        LocalDateTime roundCeiling = now.plusMinutes(1);
 
         return java.util.Date.from(roundCeiling.atZone(ZoneId.systemDefault())
                 .toInstant());
@@ -101,8 +102,8 @@ public class Main {
 
     private static Date getNextMinutePlus7secondsDateTime() {
         Clock minuteTickingClock = Clock.tickMinutes(ZoneId.systemDefault());
-        LocalDateTime now =  LocalDateTime.now(minuteTickingClock);
-        LocalDateTime roundCeiling =  now.plusMinutes(1).plusSeconds(7);
+        LocalDateTime now = LocalDateTime.now(minuteTickingClock);
+        LocalDateTime roundCeiling = now.plusMinutes(1).plusSeconds(7);
 
         return java.util.Date.from(roundCeiling.atZone(ZoneId.systemDefault())
                 .toInstant());

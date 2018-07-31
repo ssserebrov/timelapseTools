@@ -22,7 +22,7 @@ public class VideoCompliler {
             File[] dirsHourly = dirDaily.listFiles(File::isDirectory);
             for (File dirHourly : dirsHourly) {
                 File[] files = dirHourly.listFiles();
-                if (files.length < 10)
+                if (files.length < 60 * 60 / 15)
                     continue;
 
                 out = NIOUtils.writableFileChannel(dirDaily.getPath() + File.separator + dirHourly.getName() + ".mp4");
